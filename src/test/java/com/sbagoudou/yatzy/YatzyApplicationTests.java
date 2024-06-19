@@ -1,9 +1,9 @@
 package com.sbagoudou.yatzy;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.stream.Stream;
@@ -13,9 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class YatzyApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+    @Autowired
+    private Yatzy1 yatzy1;
 
     static Stream<Arguments> chance() {
         return Stream.of(
@@ -29,7 +28,7 @@ class YatzyApplicationTests {
     @ParameterizedTest
     @MethodSource("chance")
     public void test_chance_scores_sum_of_all_dice(int d1, int d2, int d3, int d4, int d5, int expected) {
-        assertEquals(expected, Yatzy1.chance(d1, d2, d3, d4, d5));
+        assertEquals(expected, yatzy1.calculateScore(d1, d2, d3, d4, d5, Category.CHANCE));
     }
 
     static Stream<Arguments> yatzy() {
@@ -45,7 +44,7 @@ class YatzyApplicationTests {
     @ParameterizedTest
     @MethodSource("yatzy")
     public void test_yatzy(int d1, int d2, int d3, int d4, int d5, int expected) {
-        assertEquals(expected, Yatzy1.yatzy(d1, d2, d3, d4, d5));
+        assertEquals(expected, yatzy1.calculateScore(d1, d2, d3, d4, d5, Category.YATZY));
     }
 
     static Stream<Arguments> ones() {
@@ -59,7 +58,7 @@ class YatzyApplicationTests {
     @ParameterizedTest
     @MethodSource("ones")
     public void test_ones(int d1, int d2, int d3, int d4, int d5, int expected) {
-        assertEquals(expected, Yatzy1.ones(d1, d2, d3, d4, d5));
+        assertEquals(expected, yatzy1.calculateScore(d1, d2, d3, d4, d5, Category.ONES));
     }
 
     static Stream<Arguments> twos() {
@@ -73,7 +72,7 @@ class YatzyApplicationTests {
     @ParameterizedTest
     @MethodSource("twos")
     public void test_twos(int d1, int d2, int d3, int d4, int d5, int expected) {
-        assertEquals(expected, Yatzy1.twos(d1, d2, d3, d4, d5));
+        assertEquals(expected, yatzy1.calculateScore(d1, d2, d3, d4, d5, Category.TWOS));
     }
 
     static Stream<Arguments> threes() {
@@ -87,7 +86,7 @@ class YatzyApplicationTests {
     @ParameterizedTest
     @MethodSource("threes")
     public void test_threes(int d1, int d2, int d3, int d4, int d5, int expected) {
-        assertEquals(expected, Yatzy1.threes(d1, d2, d3, d4, d5));
+        assertEquals(expected, yatzy1.calculateScore(d1, d2, d3, d4, d5, Category.THREES));
     }
 
     static Stream<Arguments> fours() {
@@ -102,7 +101,7 @@ class YatzyApplicationTests {
     @ParameterizedTest
     @MethodSource("fours")
     public void test_fours(int d1, int d2, int d3, int d4, int d5, int expected) {
-        assertEquals(expected, new Yatzy1(d1, d2, d3, d4, d5).fours());
+        assertEquals(expected, yatzy1.calculateScore(d1, d2, d3, d4, d5, Category.FOURS));
     }
 
     static Stream<Arguments> fives() {
@@ -117,7 +116,7 @@ class YatzyApplicationTests {
     @ParameterizedTest
     @MethodSource("fives")
     public void test_fives(int d1, int d2, int d3, int d4, int d5, int expected) {
-        assertEquals(expected, new Yatzy1(d1, d2, d3, d4, d5).fives());
+        assertEquals(expected, yatzy1.calculateScore(d1, d2, d3, d4, d5, Category.FIVES));
     }
 
     static Stream<Arguments> sixes() {
@@ -131,7 +130,7 @@ class YatzyApplicationTests {
     @ParameterizedTest
     @MethodSource("sixes")
     public void test_sixes(int d1, int d2, int d3, int d4, int d5, int expected) {
-        assertEquals(expected, new Yatzy1(d1, d2, d3, d4, d5).sixes());
+        assertEquals(expected, yatzy1.calculateScore(d1, d2, d3, d4, d5, Category.SIXES));
     }
 
     static Stream<Arguments> onePair() {
@@ -146,7 +145,7 @@ class YatzyApplicationTests {
     @ParameterizedTest
     @MethodSource("onePair")
     public void test_one_pair(int d1, int d2, int d3, int d4, int d5, int expected) {
-        assertEquals(expected, new Yatzy1().score_pair(d1, d2, d3, d4, d5));
+        assertEquals(expected, yatzy1.calculateScore(d1, d2, d3, d4, d5, Category.PAIR));
     }
 
     static Stream<Arguments> twoPairs() {
@@ -161,7 +160,7 @@ class YatzyApplicationTests {
     @ParameterizedTest
     @MethodSource("twoPairs")
     public void test_two_pairs(int d1, int d2, int d3, int d4, int d5, int expected) {
-        assertEquals(expected, Yatzy1.two_pair(d1, d2, d3, d4, d5));
+        assertEquals(expected, yatzy1.calculateScore(d1, d2, d3, d4, d5, Category.TWO_PAIRS));
     }
 
     static Stream<Arguments> threeOfAKind() {
@@ -176,7 +175,7 @@ class YatzyApplicationTests {
     @ParameterizedTest
     @MethodSource("threeOfAKind")
     public void test_three_of_a_kind(int d1, int d2, int d3, int d4, int d5, int expected) {
-        assertEquals(expected, Yatzy1.three_of_a_kind(d1, d2, d3, d4, d5));
+        assertEquals(expected, yatzy1.calculateScore(d1, d2, d3, d4, d5, Category.THREE_OF_A_KIND));
     }
 
     static Stream<Arguments> fourOfAKind() {
@@ -191,7 +190,7 @@ class YatzyApplicationTests {
     @ParameterizedTest
     @MethodSource("fourOfAKind")
     public void test_four_of_a_knd(int d1, int d2, int d3, int d4, int d5, int expected) {
-        assertEquals(expected, Yatzy1.four_of_a_kind(d1, d2, d3, d4, d5));
+        assertEquals(expected, yatzy1.calculateScore(d1, d2, d3, d4, d5, Category.FOUR_OF_A_KIND));
     }
 
     static Stream<Arguments> smallStraight() {
@@ -205,7 +204,7 @@ class YatzyApplicationTests {
     @ParameterizedTest
     @MethodSource("smallStraight")
     public void test_small_straight(int d1, int d2, int d3, int d4, int d5, int expected) {
-        assertEquals(expected, Yatzy1.smallStraight(d1, d2, d3, d4, d5));
+        assertEquals(expected, yatzy1.calculateScore(d1, d2, d3, d4, d5, Category.SMALL_STRAIGHT));
     }
 
     static Stream<Arguments> largeStraight() {
@@ -219,7 +218,7 @@ class YatzyApplicationTests {
     @ParameterizedTest
     @MethodSource("largeStraight")
     public void test_large_straight(int d1, int d2, int d3, int d4, int d5, int expected) {
-        assertEquals(expected, Yatzy1.largeStraight(d1, d2, d3, d4, d5));
+        assertEquals(expected, yatzy1.calculateScore(d1, d2, d3, d4, d5, Category.LARGE_STRAIGHT));
     }
 
     static Stream<Arguments> fullHouse() {
@@ -233,7 +232,7 @@ class YatzyApplicationTests {
     @ParameterizedTest
     @MethodSource("fullHouse")
     public void test_full_house(int d1, int d2, int d3, int d4, int d5, int expected) {
-        assertEquals(expected, Yatzy1.fullHouse(d1, d2, d3, d4, d5));
+        assertEquals(expected, yatzy1.calculateScore(d1, d2, d3, d4, d5, Category.FULL_HOUSE));
     }
 
 }
