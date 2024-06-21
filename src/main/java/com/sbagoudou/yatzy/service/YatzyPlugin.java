@@ -37,7 +37,7 @@ public interface YatzyPlugin extends Plugin<Category> {
 
     /**
      * Checks if the dice list is compliant for the Yatzy game:
-     * - The size is exactly 5
+     * - The size is exactly {@link DICE_SIZE}
      * - Values are between 1 & 6 limit included
      *
      * @param dice the list of elements representing a roll
