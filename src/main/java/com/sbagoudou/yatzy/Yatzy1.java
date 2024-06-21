@@ -1,5 +1,6 @@
 package com.sbagoudou.yatzy;
 
+import com.sbagoudou.yatzy.service.YatzyPlugin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.plugin.core.PluginRegistry;

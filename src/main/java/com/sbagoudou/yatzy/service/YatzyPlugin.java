@@ -1,5 +1,6 @@
-package com.sbagoudou.yatzy;
+package com.sbagoudou.yatzy.service;
 
+import com.sbagoudou.yatzy.Category;
 import com.sbagoudou.yatzy.exception.YatzyException;
 import org.springframework.plugin.core.Plugin;
 import org.springframework.util.CollectionUtils;

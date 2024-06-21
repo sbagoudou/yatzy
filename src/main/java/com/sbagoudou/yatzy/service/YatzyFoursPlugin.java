@@ -1,5 +1,6 @@
-package com.sbagoudou.yatzy;
+package com.sbagoudou.yatzy.service;
 
+import com.sbagoudou.yatzy.Category;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
