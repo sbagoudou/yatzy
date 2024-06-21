@@ -19,6 +19,26 @@ class YatzyApplicationTests {
     @Autowired
     private Yatzy1 yatzy1;
 
+    static Stream<Arguments> invalidDiceForCategory() {
+        return Stream.of(Category.values())
+                .flatMap(category ->
+                        Stream.of(
+                                Arguments.of(List.of(2, 3, 4, 5), category),
+                                Arguments.of(List.of(1, 1), category),
+                                Arguments.of(List.of(4, 5, 5, 6, 1, 1, 6), category),
+                                Arguments.of(List.of(4, 5, 7, 6, 1), category),
+                                Arguments.of(List.of(4, 0, 5, 6, 1), category),
+                                Arguments.of(null, category)
+                        )
+                );
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidDiceForCategory")
+    void test_category_with_wrong_dice_size(List<Integer> dice, Category category) {
+        assertThrows(YatzyException.class, () -> yatzy1.calculateScore(dice, category));
+    }
+
     static Stream<Arguments> chance() {
         return Stream.of(
                 Arguments.of(List.of(2, 3, 4, 5, 1), 15),
@@ -34,23 +54,6 @@ class YatzyApplicationTests {
         assertEquals(expected, yatzy1.calculateScore(dice, Category.CHANCE));
     }
 
-    static Stream<Arguments> chance_error() {
-        return Stream.of(
-                Arguments.of(List.of(2, 3, 4, 5)),
-                Arguments.of(List.of(1, 1)),
-                Arguments.of(List.of(4, 5, 5, 6, 1, 1, 6)),
-                Arguments.of(List.of(4, 5, 7, 6, 1)),
-                Arguments.of(List.of(4, 0, 5, 6, 1)),
-                Arguments.of((Object) null)
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("chance_error")
-    void test_chance_with_wrong_dice_size(List<Integer> dice) {
-        assertThrows(YatzyException.class, () -> yatzy1.calculateScore(dice, Category.CHANCE));
-    }
-
     static Stream<Arguments> yatzy() {
         return Stream.of(
                 Arguments.of(List.of(1, 1, 1, 1, 1), 50),
@@ -63,7 +66,7 @@ class YatzyApplicationTests {
 
     @ParameterizedTest
     @MethodSource("yatzy")
-    void test_yatzy(List<Integer> dice, int expected) {
+    void test_yatzy_scores_fifty(List<Integer> dice, int expected) {
         assertEquals(expected, yatzy1.calculateScore(dice, Category.YATZY));
     }
 
@@ -77,7 +80,7 @@ class YatzyApplicationTests {
 
     @ParameterizedTest
     @MethodSource("ones")
-    void test_ones(List<Integer> dice, int expected) {
+    void test_ones_scores_sum_of_ones(List<Integer> dice, int expected) {
         assertEquals(expected, yatzy1.calculateScore(dice, Category.ONES));
     }
 
@@ -91,7 +94,7 @@ class YatzyApplicationTests {
 
     @ParameterizedTest
     @MethodSource("twos")
-    void test_twos(List<Integer> dice, int expected) {
+    void test_twos_scores_sum_of_twos(List<Integer> dice, int expected) {
         assertEquals(expected, yatzy1.calculateScore(dice, Category.TWOS));
     }
 
@@ -105,7 +108,7 @@ class YatzyApplicationTests {
 
     @ParameterizedTest
     @MethodSource("threes")
-    void test_threes(List<Integer> dice, int expected) {
+    void test_threes_scores_sum_of_threes(List<Integer> dice, int expected) {
         assertEquals(expected, yatzy1.calculateScore(dice, Category.THREES));
     }
 
@@ -120,7 +123,7 @@ class YatzyApplicationTests {
 
     @ParameterizedTest
     @MethodSource("fours")
-    void test_fours(List<Integer> dice, int expected) {
+    void test_fours_scores_sum_of_fours(List<Integer> dice, int expected) {
         assertEquals(expected, yatzy1.calculateScore(dice, Category.FOURS));
     }
 
@@ -135,7 +138,7 @@ class YatzyApplicationTests {
 
     @ParameterizedTest
     @MethodSource("fives")
-    void test_fives(List<Integer> dice, int expected) {
+    void test_fives_scores_sum_of_fives(List<Integer> dice, int expected) {
         assertEquals(expected, yatzy1.calculateScore(dice, Category.FIVES));
     }
 
@@ -149,7 +152,7 @@ class YatzyApplicationTests {
 
     @ParameterizedTest
     @MethodSource("sixes")
-    void test_sixes(List<Integer> dice, int expected) {
+    void test_sixes_scores_sum_of_sixes(List<Integer> dice, int expected) {
         assertEquals(expected, yatzy1.calculateScore(dice, Category.SIXES));
     }
 
@@ -164,7 +167,7 @@ class YatzyApplicationTests {
 
     @ParameterizedTest
     @MethodSource("pair")
-    void test_pair(List<Integer> dice, int expected) {
+    void test_pair_sums_pairs(List<Integer> dice, int expected) {
         assertEquals(expected, yatzy1.calculateScore(dice, Category.PAIR));
     }
 
@@ -179,7 +182,7 @@ class YatzyApplicationTests {
 
     @ParameterizedTest
     @MethodSource("twoPairs")
-    void test_two_pairs(List<Integer> dice, int expected) {
+    void test_two_pairs_sums_two_pairs(List<Integer> dice, int expected) {
         assertEquals(expected, yatzy1.calculateScore(dice, Category.TWO_PAIRS));
     }
 
@@ -194,7 +197,7 @@ class YatzyApplicationTests {
 
     @ParameterizedTest
     @MethodSource("threeOfAKind")
-    void test_three_of_a_kind(List<Integer> dice, int expected) {
+    void test_three_of_a_kind_sums_tripled_values(List<Integer> dice, int expected) {
         assertEquals(expected, yatzy1.calculateScore(dice, Category.THREE_OF_A_KIND));
     }
 
@@ -209,7 +212,7 @@ class YatzyApplicationTests {
 
     @ParameterizedTest
     @MethodSource("fourOfAKind")
-    void test_four_of_a_kind(List<Integer> dice, int expected) {
+    void test_four_of_a_kind_sums_values_present_four_times(List<Integer> dice, int expected) {
         assertEquals(expected, yatzy1.calculateScore(dice, Category.FOUR_OF_A_KIND));
     }
 
@@ -223,7 +226,7 @@ class YatzyApplicationTests {
 
     @ParameterizedTest
     @MethodSource("smallStraight")
-    void test_small_straight(List<Integer> dice, int expected) {
+    void test_small_straight_are_identified(List<Integer> dice, int expected) {
         assertEquals(expected, yatzy1.calculateScore(dice, Category.SMALL_STRAIGHT));
     }
 
@@ -237,7 +240,7 @@ class YatzyApplicationTests {
 
     @ParameterizedTest
     @MethodSource("largeStraight")
-    void test_large_straight(List<Integer> dice, int expected) {
+    void test_large_straight_are_identified(List<Integer> dice, int expected) {
         assertEquals(expected, yatzy1.calculateScore(dice, Category.LARGE_STRAIGHT));
     }
 
@@ -251,8 +254,7 @@ class YatzyApplicationTests {
 
     @ParameterizedTest
     @MethodSource("fullHouse")
-    void test_full_house(List<Integer> dice, int expected) {
+    void test_full_house_works(List<Integer> dice, int expected) {
         assertEquals(expected, yatzy1.calculateScore(dice, Category.FULL_HOUSE));
     }
-
 }

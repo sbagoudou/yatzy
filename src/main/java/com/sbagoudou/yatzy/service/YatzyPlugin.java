@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 public interface YatzyPlugin extends Plugin<Category> {
 
+    int DICE_SIZE = 5;
     List<Integer> ALL_DICE_VALUES = List.of(1, 2, 3, 4, 5, 6);
 
     /**
@@ -25,10 +26,11 @@ public interface YatzyPlugin extends Plugin<Category> {
 
     /**
      * Performs preconditions checks then calls the actual score algorithm
+     *
      * @param dice a list of dice representing a roll
      * @return the calculated score
      */
-    default int calculateScore(List<Integer> dice){
+    default int calculateScore(List<Integer> dice) {
         assertDiceAreComplete(dice);
         return doCalculateScore(dice);
     }
@@ -42,13 +44,13 @@ public interface YatzyPlugin extends Plugin<Category> {
      * @throws YatzyException if dice list is not compliant
      */
     default void assertDiceAreComplete(List<Integer> dice) throws YatzyException {
-        if (CollectionUtils.isEmpty(dice) || dice.size() != 5) {
-            throw new YatzyException("Dice does not have the excepted size. Actual: {0}, Excepted: 5",
-                    dice != null ? dice.size() : 0);
+        if (CollectionUtils.isEmpty(dice) || dice.size() != DICE_SIZE) {
+            throw new YatzyException(String.format("Dice does not have the expected size. Actual: %d, Expected: %d",
+                    dice != null ? dice.size() : 0, DICE_SIZE));
         }
 
         if (dice.stream().anyMatch(d -> d < 1 || d > 6)) {
-            throw new YatzyException("All dice values are not in the range [1-6]");
+            throw new YatzyException("All dice values must be in the range [1-6]");
         }
     }
 
@@ -89,9 +91,8 @@ public interface YatzyPlugin extends Plugin<Category> {
         Map<Integer, Long> frequencyMap = getFrequencyMap(dice);
 
         return ALL_DICE_VALUES.stream()
-                .sorted(Comparator.reverseOrder())
-                .filter(i -> frequencyMap.get(i) != null && frequencyMap.get(i) >= numberOfKind)
-                .findFirst()
+                .filter(i -> frequencyMap.getOrDefault(i, 0L) >= numberOfKind)
+                .max(Comparator.naturalOrder())
                 .map(i -> i * numberOfKind)
                 .orElse(0);
     }
@@ -116,12 +117,11 @@ public interface YatzyPlugin extends Plugin<Category> {
      * @return the calculated score
      */
     default int calculateStraight(List<Integer> dice, int excludedValued) {
-        boolean hasDistinctElements = getFrequencyMap(dice).values()
+        Map<Integer, Long> frequencyMap = getFrequencyMap(dice);
+        boolean hasDistinctElements = frequencyMap.values()
                 .stream()
-                .filter(v -> v == 1)
-                .toList()
-                .size() == 5;
-        if (hasDistinctElements && getFrequencyMap(dice).get(excludedValued) == null) {
+                .allMatch(v -> v == 1);
+        if (hasDistinctElements && frequencyMap.get(excludedValued) == null) {
             return sum(dice);
         }
         return 0;
