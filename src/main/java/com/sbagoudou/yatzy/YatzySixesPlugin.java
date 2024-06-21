@@ -2,28 +2,27 @@ package com.sbagoudou.yatzy;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+import static com.sbagoudou.yatzy.Category.SIXES;
+
 @Service
 public class YatzySixesPlugin implements YatzyPlugin {
 
+    /**
+     * Calculates the score of the roll based on the {@link SIXES} category rules:
+     * The score is the sum of the dice that reads six.
+     *
+     * @param dice a list of dice representing a roll
+     * @return the calculated score
+     */
     @Override
-    public int calculateScore(int d1, int d2, int d3, int d4, int d5) {
-        int[] dice;
-        dice = new int[5];
-        dice[0] = d1;
-        dice[1] = d2;
-        dice[2] = d3;
-        dice[3] = d4;
-        dice[4] = d5;
-
-        int sum = 0;
-        for (int at = 0; at < dice.length; at++)
-            if (dice[at] == 6)
-                sum = sum + 6;
-        return sum;
+    public int calculateScore(List<Integer> dice) {
+        return getNumberScore(dice, 6);
     }
 
     @Override
     public boolean supports(Category category) {
-        return Category.SIXES == category;
+        return SIXES == category;
     }
 }

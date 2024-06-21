@@ -2,29 +2,27 @@ package com.sbagoudou.yatzy;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+import static com.sbagoudou.yatzy.Category.SMALL_STRAIGHT;
+
 @Service
 public class YatzySmallStraightPlugin implements YatzyPlugin {
 
+    /**
+     * Calculates the score of the roll based on the {@link SMALL_STRAIGHT} category rules:
+     * If the dice reads all possible values but 6, the score is the sum of all the dice.
+     *
+     * @param dice a list of dice representing a roll
+     * @return the calculated score
+     */
     @Override
-    public int calculateScore(int d1, int d2, int d3, int d4, int d5) {
-        int[] tallies;
-        tallies = new int[6];
-        tallies[d1-1] += 1;
-        tallies[d2-1] += 1;
-        tallies[d3-1] += 1;
-        tallies[d4-1] += 1;
-        tallies[d5-1] += 1;
-        if (tallies[0] == 1 &&
-                tallies[1] == 1 &&
-                tallies[2] == 1 &&
-                tallies[3] == 1 &&
-                tallies[4] == 1)
-            return 15;
-        return 0;
+    public int calculateScore(List<Integer> dice) {
+        return calculateStraight(dice, 6);
     }
 
     @Override
     public boolean supports(Category category) {
-        return Category.SMALL_STRAIGHT == category;
+        return SMALL_STRAIGHT == category;
     }
 }

@@ -2,26 +2,27 @@ package com.sbagoudou.yatzy;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+import static com.sbagoudou.yatzy.Category.FOUR_OF_A_KIND;
+
 @Service
 public class YatzyFourOfAKindPlugin implements YatzyPlugin {
 
+    /**
+     * Calculates the score of the roll based on the {@link FOUR_OF_A_KIND} category rules:
+     * If there are four dice with the same number, the score is the sum of these dice.
+     *
+     * @param dice a list of dice representing a roll
+     * @return the calculated score
+     */
     @Override
-    public int calculateScore(int d1, int d2, int d3, int d4, int d5) {
-        int[] tallies;
-        tallies = new int[6];
-        tallies[d1-1]++;
-        tallies[d2-1]++;
-        tallies[d3-1]++;
-        tallies[d4-1]++;
-        tallies[d5-1]++;
-        for (int i = 0; i < 6; i++)
-            if (tallies[i] >= 4)
-                return (i+1) * 4;
-        return 0;
+    public int calculateScore(List<Integer> dice) {
+        return calculateNOfAKind(dice, 4);
     }
 
     @Override
     public boolean supports(Category category) {
-        return Category.FOUR_OF_A_KIND == category;
+        return FOUR_OF_A_KIND == category;
     }
 }

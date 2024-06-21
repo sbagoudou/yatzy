@@ -2,22 +2,27 @@ package com.sbagoudou.yatzy;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+import static com.sbagoudou.yatzy.Category.CHANCE;
+
 @Service
 public class YatzyChancePlugin implements YatzyPlugin {
 
+    /**
+     * Calculates the score of the roll based on the {@link CHANCE} category rules:
+     * The score is the sum of all dice.
+     *
+     * @param dice a list of dice representing a roll
+     * @return the calculated score
+     */
     @Override
-    public int calculateScore(int d1, int d2, int d3, int d4, int d5) {
-        int total = 0;
-        total += d1;
-        total += d2;
-        total += d3;
-        total += d4;
-        total += d5;
-        return total;
+    public int calculateScore(List<Integer> dice) {
+        return sum(dice);
     }
 
     @Override
     public boolean supports(Category category) {
-        return Category.CHANCE == category;
+        return CHANCE == category;
     }
 }

@@ -2,24 +2,27 @@ package com.sbagoudou.yatzy;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+import static com.sbagoudou.yatzy.Category.ONES;
+
 @Service
 public class YatzyOnesPlugin implements YatzyPlugin {
 
+    /**
+     * Calculates the score of the roll based on the {@link ONES} category rules:
+     * The score is the sum of the dice that reads one.
+     *
+     * @param dice a list of dice representing a roll
+     * @return the calculated score
+     */
     @Override
-    public int calculateScore(int d1, int d2, int d3, int d4, int d5) {
-        int sum = 0;
-        if (d1 == 1) sum++;
-        if (d2 == 1) sum++;
-        if (d3 == 1) sum++;
-        if (d4 == 1) sum++;
-        if (d5 == 1)
-            sum++;
-
-        return sum;
+    public int calculateScore(List<Integer> dice) {
+        return getNumberScore(dice, 1);
     }
 
     @Override
     public boolean supports(Category category) {
-        return Category.ONES == category;
+        return ONES == category;
     }
 }

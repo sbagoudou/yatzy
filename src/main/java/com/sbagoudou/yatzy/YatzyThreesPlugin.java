@@ -2,23 +2,27 @@ package com.sbagoudou.yatzy;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+import static com.sbagoudou.yatzy.Category.THREES;
+
 @Service
 public class YatzyThreesPlugin implements YatzyPlugin {
 
+    /**
+     * Calculates the score of the roll based on the {@link THREES} category rules:
+     * The score is the sum of the dice that reads three.
+     *
+     * @param dice a list of dice representing a roll
+     * @return the calculated score
+     */
     @Override
-    public int calculateScore(int d1, int d2, int d3, int d4, int d5) {
-        int s;
-        s = 0;
-        if (d1 == 3) s += 3;
-        if (d2 == 3) s += 3;
-        if (d3 == 3) s += 3;
-        if (d4 == 3) s += 3;
-        if (d5 == 3) s += 3;
-        return s;
+    public int calculateScore(List<Integer> dice) {
+        return getNumberScore(dice, 3);
     }
 
     @Override
     public boolean supports(Category category) {
-        return Category.THREES == category;
+        return THREES == category;
     }
 }

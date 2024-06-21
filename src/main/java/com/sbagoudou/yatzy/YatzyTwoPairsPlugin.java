@@ -2,32 +2,42 @@ package com.sbagoudou.yatzy;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
+import static com.sbagoudou.yatzy.Category.TWO_PAIRS;
+
 @Service
 public class YatzyTwoPairsPlugin implements YatzyPlugin {
 
+    /**
+     * Calculates the score of the roll based on the {@link TWO_PAIRS} category rules:
+     * If there are two pairs of dice with the same number, the score is the sum of these dice.
+     *
+     * @param dice a list of dice representing a roll
+     * @return the calculated score
+     */
     @Override
-    public int calculateScore(int d1, int d2, int d3, int d4, int d5) {
-        int[] counts = new int[6];
-        counts[d1-1]++;
-        counts[d2-1]++;
-        counts[d3-1]++;
-        counts[d4-1]++;
-        counts[d5-1]++;
-        int n = 0;
-        int score = 0;
-        for (int i = 0; i < 6; i += 1)
-            if (counts[6-i-1] >= 2) {
-                n++;
-                score += (6-i);
-            }
-        if (n == 2)
-            return score * 2;
-        else
+    public int calculateScore(List<Integer> dice) {
+        var frequencyMap = getFrequencyMap(dice);
+        var repeatedCountEntries = frequencyMap.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() >= 2)
+                .toList();
+
+        if (repeatedCountEntries.size() != 2) {
             return 0;
+        }
+
+        return repeatedCountEntries.stream()
+                .map(Map.Entry::getKey)
+                .mapToInt(Integer::intValue)
+                .map(i -> i * 2)
+                .sum();
     }
 
     @Override
     public boolean supports(Category category) {
-        return Category.TWO_PAIRS == category;
+        return TWO_PAIRS == category;
     }
 }
