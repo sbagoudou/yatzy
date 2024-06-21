@@ -43,7 +43,7 @@ public interface YatzyPlugin extends Plugin<Category> {
      */
     default void assertDiceAreComplete(List<Integer> dice) throws YatzyException {
         if (CollectionUtils.isEmpty(dice) || dice.size() != 5) {
-            throw new YatzyException("Dice have not the excepted size. Actual: {0}, Excepted: 5",
+            throw new YatzyException("Dice does not have the excepted size. Actual: {0}, Excepted: 5",
                     dice != null ? dice.size() : 0);
         }
 
