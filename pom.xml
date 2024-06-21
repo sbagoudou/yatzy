@@ -13,21 +13,11 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>yatzy</name>
 	<description>Yatzy Project Refactor</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<spring-plugin.version>3.0.0</spring-plugin.version>
+		<lombok.version>1.18.32</lombok.version>
+		<mockito.version>5.7.0</mockito.version>
 	</properties>
 	<dependencies>
 		<!-- Spring -->
@@ -38,14 +28,14 @@
 		<dependency>
 			<groupId>org.springframework.plugin</groupId>
 			<artifactId>spring-plugin-core</artifactId>
-			<version>3.0.0</version>
+			<version>${spring-plugin.version}</version>
 		</dependency>
 
 		<!-- Third Party -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.32</version>
+			<version>${lombok.version}</version>
 		</dependency>
 
 		<!-- Test -->
@@ -57,7 +47,7 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>5.7.0</version>
+			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
