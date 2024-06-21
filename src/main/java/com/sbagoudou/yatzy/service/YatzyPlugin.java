@@ -31,19 +31,19 @@ public interface YatzyPlugin extends Plugin<Category> {
      * @return the calculated score
      */
     default int calculateScore(List<Integer> dice) {
-        assertDiceAreComplete(dice);
+        assertDiceAreValid(dice);
         return doCalculateScore(dice);
     }
 
     /**
-     * Checks if the dice list is compliant for the game:
+     * Checks if the dice list is compliant for the Yatzy game:
      * - The size is exactly 5
      * - Values are between 1 & 6 limit included
      *
      * @param dice the list of elements representing a roll
      * @throws YatzyException if dice list is not compliant
      */
-    default void assertDiceAreComplete(List<Integer> dice) throws YatzyException {
+    default void assertDiceAreValid(List<Integer> dice) throws YatzyException {
         if (CollectionUtils.isEmpty(dice) || dice.size() != DICE_SIZE) {
             throw new YatzyException(String.format("Dice does not have the expected size. Actual: %d, Expected: %d",
                     dice != null ? dice.size() : 0, DICE_SIZE));
