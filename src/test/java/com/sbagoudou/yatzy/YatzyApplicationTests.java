@@ -1,5 +1,6 @@
 package com.sbagoudou.yatzy;
 
+import com.sbagoudou.yatzy.exception.YatzyException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class YatzyApplicationTests {
@@ -30,6 +32,23 @@ class YatzyApplicationTests {
     @MethodSource("chance")
     void test_chance_scores_sum_of_all_dice(List<Integer> dice, int expected) {
         assertEquals(expected, yatzy1.calculateScore(dice, Category.CHANCE));
+    }
+
+    static Stream<Arguments> chance_error() {
+        return Stream.of(
+                Arguments.of(List.of(2, 3, 4, 5)),
+                Arguments.of(List.of(1, 1)),
+                Arguments.of(List.of(4, 5, 5, 6, 1, 1, 6)),
+                Arguments.of(List.of(4, 5, 7, 6, 1)),
+                Arguments.of(List.of(4, 0, 5, 6, 1)),
+                Arguments.of((Object) null)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("chance_error")
+    void test_chance_with_wrong_dice_size(List<Integer> dice) {
+        assertThrows(YatzyException.class, () -> yatzy1.calculateScore(dice, Category.CHANCE));
     }
 
     static Stream<Arguments> yatzy() {

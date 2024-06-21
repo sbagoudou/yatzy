@@ -17,7 +17,7 @@ public class YatzyYatzyPlugin implements YatzyPlugin {
      * @return the calculated score
      */
     @Override
-    public int calculateScore(List<Integer> dice) {
+    public int doCalculateScore(List<Integer> dice) {
         if (dice.stream().distinct().count() == 1) {
             return 50;
         }

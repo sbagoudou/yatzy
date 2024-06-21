@@ -18,7 +18,7 @@ public class YatzyTwoPairsPlugin implements YatzyPlugin {
      * @return the calculated score
      */
     @Override
-    public int calculateScore(List<Integer> dice) {
+    public int doCalculateScore(List<Integer> dice) {
         var frequencyMap = getFrequencyMap(dice);
         var repeatedCountEntries = frequencyMap.entrySet()
                 .stream()

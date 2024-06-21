@@ -1,6 +1,8 @@
 package com.sbagoudou.yatzy;
 
+import com.sbagoudou.yatzy.exception.YatzyException;
 import org.springframework.plugin.core.Plugin;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Comparator;
 import java.util.List;
@@ -18,7 +20,36 @@ public interface YatzyPlugin extends Plugin<Category> {
      * @param dice a list of dice representing a roll
      * @return the calculated score
      */
-    int calculateScore(List<Integer> dice);
+    int doCalculateScore(List<Integer> dice);
+
+    /**
+     * Performs preconditions checks then calls the actual score algorithm
+     * @param dice a list of dice representing a roll
+     * @return the calculated score
+     */
+    default int calculateScore(List<Integer> dice){
+        assertDiceAreComplete(dice);
+        return doCalculateScore(dice);
+    }
+
+    /**
+     * Checks if the dice list is compliant for the game:
+     * - The size is exactly 5
+     * - Values are between 1 & 6 limit included
+     *
+     * @param dice the list of elements representing a roll
+     * @throws YatzyException if dice list is not compliant
+     */
+    default void assertDiceAreComplete(List<Integer> dice) throws YatzyException {
+        if (CollectionUtils.isEmpty(dice) || dice.size() != 5) {
+            throw new YatzyException("Dice have not the excepted size. Actual: {0}, Excepted: 5",
+                    dice != null ? dice.size() : 0);
+        }
+
+        if (dice.stream().anyMatch(d -> d < 1 || d > 6)) {
+            throw new YatzyException("All dice values are not in the range [1-6]");
+        }
+    }
 
     /**
      * Calculates the sum of elements in the list

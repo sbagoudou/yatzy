@@ -17,7 +17,7 @@ public class YatzyThreesPlugin implements YatzyPlugin {
      * @return the calculated score
      */
     @Override
-    public int calculateScore(List<Integer> dice) {
+    public int doCalculateScore(List<Integer> dice) {
         return getNumberScore(dice, 3);
     }
 

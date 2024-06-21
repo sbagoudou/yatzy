@@ -17,7 +17,7 @@ public class YatzyFullHousePlugin implements YatzyPlugin {
      * @return the calculated score
      */
     @Override
-    public int calculateScore(List<Integer> dice) {
+    public int doCalculateScore(List<Integer> dice) {
         var frequencyMap = getFrequencyMap(dice);
         if (frequencyMap.containsValue(2L) && frequencyMap.containsValue(3L)) {
             return sum(dice);
